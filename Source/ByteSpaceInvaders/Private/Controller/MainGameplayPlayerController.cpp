@@ -21,9 +21,9 @@ void AMainGameplayPlayerController::SetupInputComponent()
     if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
     {
         EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMainGameplayPlayerController::Move);
+        EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &AMainGameplayPlayerController::Fire);
     }
 }
-
 
 void AMainGameplayPlayerController::BeginPlay()
 {
@@ -34,5 +34,12 @@ void AMainGameplayPlayerController::Move(const FInputActionValue& Value)
 {
     if(!PlayerShip) return;
     
-    PlayerShip->AddSpeed(BaseSpeedChangeOnMove*Value.GetMagnitude());
+    PlayerShip->AddSpeed(BaseSpeedChangeOnMove*Value.GetMagnitude(), AccelerationModifier, DecelerationModifier);
+}
+
+void AMainGameplayPlayerController::Fire(const FInputActionValue& Value)
+{
+    if(!PlayerShip) return;
+
+    PlayerShip->FireProjectile();
 }

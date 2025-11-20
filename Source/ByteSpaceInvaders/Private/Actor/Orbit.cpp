@@ -48,6 +48,12 @@ float AOrbit::GetRadius()
 	return OrbitSphere->GetScaledSphereRadius();
 }
 
+AOrbit* AOrbit::GetNextOrbit()
+{
+	TScriptInterface<ILinkedListElement> NextElement = ILinkedListElement::Execute_GetNextElement(this);
+	return Cast<AOrbit>(NextElement.GetObject());
+}
+
 void AOrbit::AddShipToOrbit(AOrbitalShip* Ship)
 {
 	ShipsOnOrbit.Add(Ship);

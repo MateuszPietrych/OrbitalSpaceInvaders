@@ -14,6 +14,7 @@ class USceneComponent;
 class URotatingMovementComponent;
 
 class UHealthComponent;
+class UWeaponComponent;
 
 UCLASS()
 class BYTESPACEINVADERS_API AOrbitalShip : public APawn, public ICombat
@@ -39,6 +40,9 @@ public:
 	virtual float GetDamage_Implementation() override;
 
 	UFUNCTION(BlueprintCallable)
+	void InitializeShip(AOrbit* NewOrbit);
+
+	UFUNCTION(BlueprintCallable)
 	void ChangeSpeed(float NewSpeed);
 
 	UFUNCTION(BlueprintCallable)
@@ -48,7 +52,7 @@ public:
 	void ChangeSpeedSmoothTick();
 
 	UFUNCTION(BlueprintCallable)
-	void AddSpeed(float AddSpeed);
+	void AddSpeed(float AddSpeed, float AccelerattionModifier = 1.0f, float DecelerationModifier = 1.0f);
 
 	UFUNCTION(BlueprintCallable)
 	void ChangeRadiusSmooth(float RadiusLength);
@@ -58,6 +62,18 @@ public:
 
 	UFUNCTION()
 	void SetRadiusLength(float RadiusLength);
+
+	UFUNCTION()
+	void LowerOrbit();
+
+	UFUNCTION()
+	void ChangeDirection();
+
+	UFUNCTION()
+	void ShipDeath(AActor* DeadActor);
+
+	UFUNCTION(BlueprintCallable)
+	void FireProjectile();
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = ShipData, meta = (AllowPrivateAccess = "true"))
@@ -81,13 +97,20 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UHealthComponent> HealthComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UWeaponComponent> WeaponComponent;
+
+
+	TWeakObjectPtr<AOrbit> CurrentOrbit;
 
 	FTimerHandle SmoothChangeSpeedTimer;
+	bool bIsSmoothSpeedChangeOn = false;
 	float TimeInChangeSpeed = 0.0f;
 	float StartSpeed = 0.0f;
 	float EndSpeed = 0.0f;
 
 	FTimerHandle SmoothChangeRadiusTimer;
+	bool bIsSmoothRadiusChangeOn = false;
 	float TimeInRadiusChange = 0.0f;
 	float StartRadius = 0.0f;
 	float EndRadius = 0.0f;

@@ -4,10 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Interface/Combat.h"
 #include "Projectile.generated.h"
 
+class UProjectileMovementComponent;
+class USphereComponent;
+
 UCLASS()
-class BYTESPACEINVADERS_API AProjectile : public AActor
+class BYTESPACEINVADERS_API AProjectile : public AActor, public ICombat
 {
 	GENERATED_BODY()
 	
@@ -23,4 +27,23 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void TakeDamage_Implementation(float DamageAmount) override;
+	virtual float GetDamage_Implementation() override;
+
+	void InitializeProjectile(float NewDamage);
+
+
+private:
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USceneComponent> BaseSceneComponent;	
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USphereComponent> CollisionSphere;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UProjectileMovementComponent> ProjectileMovement;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta = (AllowPrivateAccess = "true"))
+	float Damage = 1.0f;
 };

@@ -5,6 +5,7 @@
 #include "Utility/UtilityBlueprintFunctionLibrary.h"
 #include "Actor/Orbit.h"
 #include "Actor/OrbitalShip.h"
+#include "Actor/EnemyManager.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Pawn.h"
 
@@ -20,6 +21,8 @@ ASpawner::ASpawner()
 void ASpawner::BeginPlay()
 {
 	Super::BeginPlay();	
+	AActor* ActorEnemyManager = UGameplayStatics::GetActorOfClass(this, AEnemyManager::StaticClass());
+	EnemyManager = Cast<AEnemyManager>(ActorEnemyManager);
 }
 
 // Called every frame
@@ -31,12 +34,6 @@ void ASpawner::Tick(float DeltaTime)
 void ASpawner::SpawnStartObritalShips()
 {
 	AOrbit* FirstOrbit = UUtilityBlueprintFunctionLibrary::GetFirstOrbit(this);
-
-	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(this, 0);
-    if (!PlayerPawn) return;
-
-    FVector PlayerLocation = PlayerPawn->GetActorLocation();
-
 	AOrbit* CurrentOrbit = FirstOrbit;
 
 	if(!CurrentOrbit)
@@ -45,20 +42,37 @@ void ASpawner::SpawnStartObritalShips()
 		return;
 	}
 
+	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(this, 0);
+    if (!PlayerPawn) return;
+    FVector PlayerLocation = PlayerPawn->GetActorLocation();
+
+	TArray<AOrbitalShip*> SpawnedShipList;
 	for(int EnemyCountOnOrbit : StartWave.EnemiesOnOrbits)
 	{
-		FRotator Rotation = FRotator::ZeroRotator;
-		FActorSpawnParameters SpawnParams = FActorSpawnParameters();
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn; 
-		for(int i=0; i<EnemyCountOnOrbit; i++)
-		{
-			AOrbitalShip* SpawnedShip = GetWorld()->SpawnActor<AOrbitalShip>(EnemyShipClass, PlayerLocation, Rotation, SpawnParams);
-			if(SpawnedShip == nullptr) break;
-			SpawnedShip->SetRadiusLength(CurrentOrbit->GetRadius());
-			Rotation += FRotator(0.0f, 360.0f/EnemyCountOnOrbit, 0.0f);
-		}
-		TScriptInterface<ILinkedListElement> NextElement = ILinkedListElement::Execute_GetNextElement(CurrentOrbit);
-		CurrentOrbit = Cast<AOrbit>(NextElement.GetObject());
+		TArray<AOrbitalShip*> SpawnedShipListOnOrbit = SpawnOrbitalShipsOnOrbit(EnemyCountOnOrbit, CurrentOrbit, PlayerLocation);
+		SpawnedShipList.Append(SpawnedShipListOnOrbit);
+		CurrentOrbit = CurrentOrbit->GetNextOrbit();
 	}
-
+	EnemyManager->FinishSpawningEnemies(SpawnedShipList);
 }
+
+TArray<AOrbitalShip*> ASpawner::SpawnOrbitalShipsOnOrbit(int EnemyCountOnOrbit, AOrbit* CurrentOrbit, FVector SpawnLocation)
+{
+	FRotator Rotation = FRotator::ZeroRotator;
+	FActorSpawnParameters SpawnParams = FActorSpawnParameters();
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn; 
+
+	TArray<AOrbitalShip*> SpawnedShipList;
+	for(int i=0; i<EnemyCountOnOrbit; i++)
+	{
+		AOrbitalShip* SpawnedShip = GetWorld()->SpawnActor<AOrbitalShip>(EnemyShipClass, SpawnLocation, Rotation, SpawnParams);
+		if(SpawnedShip == nullptr) break;
+		
+		SpawnedShip->InitializeShip(CurrentOrbit);
+		SpawnedShipList.Add(SpawnedShip);
+		Rotation += FRotator(0.0f, 360.0f/EnemyCountOnOrbit, 0.0f);
+	}
+	
+	return SpawnedShipList;
+}
+

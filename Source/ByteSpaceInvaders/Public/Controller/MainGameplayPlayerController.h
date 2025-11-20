@@ -26,6 +26,8 @@ private:
 	UFUNCTION()
 	void Move(const FInputActionValue& Value);
 
+	UFUNCTION()
+	void Fire(const FInputActionValue& Value);
 
 
 
@@ -39,8 +41,14 @@ private:
 	UInputAction* MoveAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* ShootAction;
+	UInputAction* FireAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	float BaseSpeedChangeOnMove = 1.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	float AccelerationModifier = 1.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	float DecelerationModifier = 1.0f;
 };

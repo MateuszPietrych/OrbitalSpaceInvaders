@@ -18,13 +18,16 @@ class BYTESPACEINVADERS_API UOrbitalShipDataAsset : public UPrimaryDataAsset
 
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Stats)
-	float ShipHealth;
+	float ShipHealth = 1.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Stats)
-	float ShipDamage;
+	float ShipDamage = 1.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Movement)
-	float ChangeSpeedTransitionTime;
+	float MaxSpeed = 180.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Movement)
+	float ChangeSpeedTransitionTime = 0.3f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Projectile)
 	TSubclassOf<AProjectile> ProjectileClass;

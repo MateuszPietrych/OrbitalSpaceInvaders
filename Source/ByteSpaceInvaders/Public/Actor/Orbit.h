@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Interface/LinkedListElement.h"
+#include "Templates/SharedPointer.h"
 #include "Orbit.generated.h"
 
 class USphereComponent;
@@ -40,6 +41,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void RemoveShipFromOrbit(AOrbitalShip* Ship);
 
+	UFUNCTION(BlueprintCallable)
+	AOrbit* GetNextOrbit();
+
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<USphereComponent> OrbitSphere;	
@@ -48,6 +52,7 @@ private:
 	TScriptInterface<ILinkedListElement> NextOrbit;
 
 	UPROPERTY()
+	// TArray<TWeakPtr<AOrbitalShip>> ShipsOnOrbit; 
 	TArray<AOrbitalShip*> ShipsOnOrbit; 
 
 };
