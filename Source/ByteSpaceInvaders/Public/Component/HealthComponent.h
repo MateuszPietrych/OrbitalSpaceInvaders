@@ -7,6 +7,8 @@
 #include "HealthComponent.generated.h"
 
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnActorDeathSignature, AActor*, DeadActor);
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BYTESPACEINVADERS_API UHealthComponent : public UActorComponent
 {
@@ -28,6 +30,9 @@ public:
 	void SetHealth(float NewHealth);
 
 	UFUNCTION(BlueprintCallable)
+	void ApplyDamage(float Damage);
+
+	UFUNCTION(BlueprintCallable)
 	void InitializeHealthComponent(float NewMaxHealth);
 
 	UFUNCTION(BlueprintCallable)
@@ -38,6 +43,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool IsDead();		
+
+	UPROPERTY()
+	FOnActorDeathSignature OnActorDeath;
 
 private:
 	UPROPERTY()

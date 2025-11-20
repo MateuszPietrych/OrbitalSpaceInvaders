@@ -4,7 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Utility/ByteSpaceInvadersStructures.h"
 #include "Spawner.generated.h"
+
+class Orbit;
+class AOrbitalShip;
 
 UCLASS()
 class BYTESPACEINVADERS_API ASpawner : public AActor
@@ -22,5 +26,16 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintCallable)
+	void SpawnStartObritalShips();
+
+private:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GameSetup, meta = (AllowPrivateAccess = "true"))
+	FEnemyWave StartWave;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GameSetup, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AOrbitalShip> EnemyShipClass;
+
 
 };

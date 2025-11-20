@@ -3,10 +3,3 @@
 
 #include "Utility/ByteSpaceInvadersStructures.h"
 
-ByteSpaceInvadersStructures::ByteSpaceInvadersStructures()
-{
-}
-
-ByteSpaceInvadersStructures::~ByteSpaceInvadersStructures()
-{
-}

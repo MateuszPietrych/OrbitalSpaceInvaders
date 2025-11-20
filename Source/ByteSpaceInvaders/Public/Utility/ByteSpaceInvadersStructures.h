@@ -3,13 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ByteSpaceInvadersStructures.generated.h"
 
-/**
- * 
- */
-class BYTESPACEINVADERS_API ByteSpaceInvadersStructures
+USTRUCT(BlueprintType)
+struct FEnemyWave
 {
+	GENERATED_BODY()
+
 public:
-	ByteSpaceInvadersStructures();
-	~ByteSpaceInvadersStructures();
+	//First element is number of enemies on the most far orbit
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<int> EnemiesOnOrbits;
+
 };

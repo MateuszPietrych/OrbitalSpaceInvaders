@@ -13,5 +13,12 @@ UCLASS()
 class BYTESPACEINVADERS_API UUtilityBlueprintFunctionLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
+
+public:
+	UFUNCTION(BlueprintCallable)
+	static AByteSpaceInvadersGameMode* GetByteSpaceInvadersGameMode(UObject* ContextObject);
+
+	UFUNCTION(BlueprintCallable)
+	static AOrbit* GetFirstOrbit(UObject* ContextObject);
 	
 };

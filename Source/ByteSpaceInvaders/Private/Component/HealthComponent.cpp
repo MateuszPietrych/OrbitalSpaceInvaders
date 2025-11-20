@@ -35,6 +35,13 @@ void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 void UHealthComponent::SetHealth(float NewHealth)
 {
 	CurrentHealth = FMath::Clamp(NewHealth, 0.0f, MaxHealth);
+	if(CurrentHealth <= 0.0f) OnActorDeath.Broadcast(GetOwner());
+}
+
+void UHealthComponent::ApplyDamage(float Damage)
+{
+	float NewHealth = CurrentHealth - Damage;
+	SetHealth(NewHealth);
 }
 
 void UHealthComponent::InitializeHealthComponent(float NewMaxHealth)
