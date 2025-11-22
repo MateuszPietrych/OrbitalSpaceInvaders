@@ -6,6 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "EnemyManager.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDestroyingLastEnemy);
+
+
 class AOrbitalShip;
 
 UCLASS()
@@ -31,7 +34,14 @@ public:
 
 	void ChangeMovementDirection();
 
+	void AddEnemy(AOrbitalShip* Ship);
+
+	UFUNCTION()
+	void RemoveShipFromList(AOrbitalShip* Ship);
+
 	void Fire();
+
+	FOnDestroyingLastEnemy OnDestroyingLastEnemy;
 
 private:
 	float GetTimePeriodBetweenFires();
@@ -46,7 +56,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = EnemyOrbitMovement)
 	float TimeUntilChangeDirection = 5.0f;
 
-	//NOT USED YET - TODO
+	//NOT USED YET - TODO?
 	UPROPERTY(EditDefaultsOnly, Category = EnemyOrbitMovement)
 	float OrbitalShipsSpeedModifierOnOrbitChange = 1.1f;
 

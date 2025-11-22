@@ -29,7 +29,7 @@ void AEnemyManager::FinishSpawningEnemies(TArray<AOrbitalShip*> SpawnedShipList)
 	OrbitalShips = SpawnedShipList;
 	for(AOrbitalShip* Ship: OrbitalShips)
 	{
-		Ship->ChangeDirection();
+		Ship->OnShipDeath.AddDynamic(this, &AEnemyManager::RemoveShipFromList);
 	}
 	GetWorld()->GetTimerManager().SetTimer(ChangeDirectionTimer, this, &AEnemyManager::ChangeMovementDirection, TimeUntilChangeDirection, true);
 	GetWorld()->GetTimerManager().SetTimer(LowerOrbitTimer, this, &AEnemyManager::LowerOrbit, TimeOnSingleOrbit, true);
@@ -60,7 +60,7 @@ void AEnemyManager::Fire()
 	
 	for(int Index : GetRandomEnemyIndexes(FinalFireCount))
 	{
-		if(OrbitalShips.IsValidIndex(Index))
+		if(OrbitalShips.IsValidIndex(Index) && OrbitalShips[Index] != nullptr)
 		{
 			OrbitalShips[Index]->FireProjectile();
 		}
@@ -98,7 +98,22 @@ TArray<int> AEnemyManager::GetRandomEnemyIndexes(int EnemyCount)
 	{
 		int RandomChangeToFireCount = FMath::RandRange(0, LastIndex);
 		if(IndexList.Contains(RandomChangeToFireCount)) continue;
-		IndexList.Add(i);
+		IndexList.Add(RandomChangeToFireCount);
 	}
 	return IndexList;
+}
+
+void AEnemyManager::AddEnemy(AOrbitalShip* Ship)
+{
+	Ship->OnShipDeath.AddDynamic(this, &AEnemyManager::RemoveShipFromList);
+	OrbitalShips.Add(Ship);
+}
+
+void AEnemyManager::RemoveShipFromList(AOrbitalShip* Ship)
+{
+	if(OrbitalShips.Contains(Ship))
+	{
+		OrbitalShips.Remove(Ship);
+		if(OrbitalShips.IsEmpty()) OnDestroyingLastEnemy.Broadcast();
+	}
 }

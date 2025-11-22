@@ -31,17 +31,35 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SpawnStartObritalShips();
 
+	UFUNCTION(BlueprintCallable)
+	void SpawnSpecialEnemy();
+
 	UFUNCTION()
-	TArray<AOrbitalShip*> SpawnOrbitalShipsOnOrbit(int EnemyCountOnOrbit, AOrbit* CurrentOrbit, FVector SpawnLocation);
+	TArray<AOrbitalShip*> SpawnOrbitalShipsOnOrbit(int EnemyCountOnOrbit, AOrbit* CurrentOrbit);
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GameSetup, meta = (AllowPrivateAccess = "true"))
 	FEnemyWave StartWave;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GameSetup, meta = (AllowPrivateAccess = "true"))
+	TArray<float> SpecialEnemySpawnTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GameSetup, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AOrbitalShip> EnemyShipClass;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GameSetup, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AOrbitalShip> SpecialEnemyShipClass;
+
 	TWeakObjectPtr<AEnemyManager> EnemyManager;
+
+	UPROPERTY()
+	FVector EnemySpawnLocation;
+
+	UPROPERTY()
+	float GameTime = 0.0f;
+
+	UPROPERTY()
+	int SpecialEnemyIndex = 0;
 
 
 

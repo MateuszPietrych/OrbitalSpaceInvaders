@@ -27,3 +27,4 @@ AOrbit* UUtilityBlueprintFunctionLibrary::GetFirstOrbit(UObject* ContextObject)
     AByteSpaceInvadersGameMode* GameMode = GetByteSpaceInvadersGameMode(ContextObject);
     return GameMode->GetFirstOrbit();
 }
+

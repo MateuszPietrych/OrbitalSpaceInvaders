@@ -9,6 +9,8 @@
 class UInputMappingContext;
 class UInputAction;
 class AOrbitalShip;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPauseGame, bool, bPaused);
 /**
  * 
  */
@@ -21,6 +23,9 @@ public:
 	virtual void SetupInputComponent() override;
 
 	virtual void BeginPlay();
+
+	UPROPERTY()
+	FOnPauseGame OnPauseGame;
 	
 private:
 	UFUNCTION()
@@ -28,6 +33,9 @@ private:
 
 	UFUNCTION()
 	void Fire(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void PauseGame(const FInputActionValue& Value);
 
 
 
@@ -42,6 +50,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* FireAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* PauseAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	float BaseSpeedChangeOnMove = 1.0f;

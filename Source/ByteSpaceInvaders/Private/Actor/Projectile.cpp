@@ -41,7 +41,7 @@ void AProjectile::Tick(float DeltaTime)
 
 }
 
-void AProjectile::TakeDamage_Implementation(float DamageAmount)
+void AProjectile::TakeDamage_Implementation(FDamageContext DamageContext)
 {
 	Destroy();
 }

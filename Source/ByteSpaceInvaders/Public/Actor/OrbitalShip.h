@@ -15,6 +15,9 @@ class URotatingMovementComponent;
 
 class UHealthComponent;
 class UWeaponComponent;
+class UHpVisualsDataAsset;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnShipDeathSignature, AOrbitalShip*, DeadShip);
 
 UCLASS()
 class BYTESPACEINVADERS_API AOrbitalShip : public APawn, public ICombat
@@ -36,7 +39,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	virtual void TakeDamage_Implementation(float DamageAmount) override;
+	virtual void TakeDamage_Implementation(FDamageContext DamageContext) override;
 	virtual float GetDamage_Implementation() override;
 
 	UFUNCTION(BlueprintCallable)
@@ -75,6 +78,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void FireProjectile();
 
+	UHealthComponent* GetOrbitalShipHealthComponent();
+	UHpVisualsDataAsset* GetHpVisualsDataAsset();
+
+	UPROPERTY(BlueprintAssignable)
+	FOnShipDeathSignature OnShipDeath;
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = ShipData, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UOrbitalShipDataAsset> ShipData;
@@ -99,6 +108,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UWeaponComponent> WeaponComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UHpVisualsDataAsset* HpVisualsDataAsset;
 
 
 	TWeakObjectPtr<AOrbit> CurrentOrbit;

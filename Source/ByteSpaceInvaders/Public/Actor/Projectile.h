@@ -27,7 +27,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void TakeDamage_Implementation(float DamageAmount) override;
+	virtual void TakeDamage_Implementation(FDamageContext DamageContext) override;
 	virtual float GetDamage_Implementation() override;
 
 	void InitializeProjectile(float NewDamage);

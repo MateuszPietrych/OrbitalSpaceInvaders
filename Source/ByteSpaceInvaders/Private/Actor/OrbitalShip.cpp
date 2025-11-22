@@ -13,6 +13,7 @@
 #include "Component/WeaponComponent.h"
 #include "DataAsset/OrbitalShipDataAsset.h"
 #include "Actor/Orbit.h"
+#include "DataAsset/HpVisualsDataAsset.h"
 
 
 
@@ -50,7 +51,7 @@ void AOrbitalShip::BeginPlay()
 	Super::BeginPlay();
 
 	HealthComponent->InitializeHealthComponent(ShipData->ShipHealth);
-	HealthComponent->OnActorDeath.AddDynamic(this, &AOrbitalShip::ShipDeath);
+	HealthComponent->OnHealthZero.AddDynamic(this, &AOrbitalShip::ShipDeath);
 }
 
 // Called every frame
@@ -77,9 +78,9 @@ void AOrbitalShip::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 }
 
-void AOrbitalShip::TakeDamage_Implementation(float DamageAmount)
+void AOrbitalShip::TakeDamage_Implementation(FDamageContext DamageContext)
 {
-	HealthComponent->ApplyDamage(DamageAmount);
+	HealthComponent->ApplyDamage(DamageContext.DamageValue);
 }
 
 float AOrbitalShip::GetDamage_Implementation()
@@ -119,6 +120,7 @@ void AOrbitalShip::ChangeSpeedSmoothTick()
 	if(Alpha >= 1)
 	{
 		bIsSmoothSpeedChangeOn = false;
+		TimeInChangeSpeed = 0.0f;
 		StartSpeed = 0.0f;
 	}
 }
@@ -138,6 +140,11 @@ void AOrbitalShip::ChangeRadiusSmooth(float RadiusLength)
 	StartRadius = RotatingSphere->GetScaledSphereRadius();
 	EndRadius = RadiusLength;
 	bIsSmoothRadiusChangeOn = true;
+	UE_LOG(LogTemp, Warning,
+		TEXT("ChangeRadiusSmooth: SR - %f, ER - %f, b - %s"),
+		StartRadius,
+		EndRadius,
+		bIsSmoothRadiusChangeOn ? TEXT("True") : TEXT("False"));
 }
 
 void AOrbitalShip::ChangeRadiusSmoothTick()
@@ -149,10 +156,12 @@ void AOrbitalShip::ChangeRadiusSmoothTick()
 	float NewRadius = FMath::Lerp(StartRadius, EndRadius, Alpha);
 
 	SetRadiusLength(NewRadius);
+	UE_LOG(LogTemp, Warning, TEXT("ChangeRadiusSmoothTick"));
 
 	if(Alpha >= 1)
 	{
 		bIsSmoothRadiusChangeOn = false;
+		TimeInRadiusChange = 0.0f;
 		StartRadius = 0.0f;
 	}
 }
@@ -180,7 +189,7 @@ void AOrbitalShip::ChangeDirection()
 
 void AOrbitalShip::ShipDeath(AActor* DeadActor)
 {
-	Destroy();
+	OnShipDeath.Broadcast(this);
 }
 
 void AOrbitalShip::FireProjectile()
@@ -188,4 +197,12 @@ void AOrbitalShip::FireProjectile()
 	WeaponComponent->SpawnProjectile(ShipData->ProjectileClass, ShipData->ShipDamage);
 }
 
+UHealthComponent* AOrbitalShip::GetOrbitalShipHealthComponent()
+{
+	return HealthComponent;
+}
 
+UHpVisualsDataAsset* AOrbitalShip::GetHpVisualsDataAsset()
+{
+    return HpVisualsDataAsset;
+}

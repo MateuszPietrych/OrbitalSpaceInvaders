@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
 #include "UObject/NoExportTypes.h"
+#include "Utility/ByteSpaceInvadersStructures.h"
 #include "Combat.generated.h"
 
 /**
@@ -22,7 +23,7 @@ class BYTESPACEINVADERS_API ICombat
 
 public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Combat")
-	void TakeDamage(float DamageAmount);
+	void TakeDamage(FDamageContext DamageContext);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Combat")
 	float GetDamage();

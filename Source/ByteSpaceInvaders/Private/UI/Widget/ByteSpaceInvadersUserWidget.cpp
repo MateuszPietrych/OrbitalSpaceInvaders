@@ -2,4 +2,12 @@
 
 
 #include "UI/Widget/ByteSpaceInvadersUserWidget.h"
+#include "Controller/UIController.h"
 
+
+
+void UByteSpaceInvadersUserWidget::SetUIController(UUIController* NewUIController)
+{
+	UIController = NewUIController;
+	UIControllerSet();
+}
