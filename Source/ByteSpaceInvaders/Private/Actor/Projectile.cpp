@@ -20,6 +20,7 @@ AProjectile::AProjectile()
 	CollisionSphere->SetupAttachment(RootComponent);
 
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
+	ProjectileMovement->InitialSpeed = ProjetileSpeed;
 }
 
 // Called when the game starts or when spawned

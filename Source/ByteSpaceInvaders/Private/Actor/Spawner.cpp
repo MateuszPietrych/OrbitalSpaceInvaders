@@ -8,6 +8,7 @@
 #include "Actor/EnemyManager.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Pawn.h"
+#include "Actor/Asteroid.h"
 
 // Sets default values
 ASpawner::ASpawner()
@@ -35,13 +36,8 @@ void ASpawner::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	GameTime += DeltaTime;
 
-	if(SpecialEnemyIndex >= SpecialEnemySpawnTime.Num()) return;
-	float CurrentTimeSpawn = SpecialEnemySpawnTime[SpecialEnemyIndex];
-	if(!SpecialEnemySpawnTime.IsEmpty() && CurrentTimeSpawn <= GameTime)
-	{
-		SpawnSpecialEnemy();
-		SpecialEnemyIndex++;
-	}
+	TrySpawnSpecialEnemy();
+	TrySpawnAsteroid();
 }
 
 void ASpawner::SpawnStartObritalShips()
@@ -91,7 +87,66 @@ void ASpawner::SpawnSpecialEnemy()
 	FRotator Rotation = FRotator::ZeroRotator;
 	FActorSpawnParameters SpawnParams = FActorSpawnParameters();
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn; 
-	AOrbitalShip* SpawnedShip = GetWorld()->SpawnActor<AOrbitalShip>(EnemyShipClass, EnemySpawnLocation, Rotation, SpawnParams);
+	AOrbitalShip* SpawnedShip = GetWorld()->SpawnActor<AOrbitalShip>(SpecialEnemyShipClass, EnemySpawnLocation, Rotation, SpawnParams);
+	if(!SpawnedShip) return;
 	EnemyManager->AddEnemy(SpawnedShip);
 }
 
+
+AAsteroid* ASpawner::SpawnAsteroid(FVector SpawnLocation, int AsteroidLevel)
+{
+	FTransform SpawnTransform = CreateNewAsteroidTransform(SpawnLocation, AsteroidLevel);
+    FActorSpawnParameters SpawnParams = FActorSpawnParameters();
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn; 
+    AAsteroid* Asteroid = GetWorld()->SpawnActor<AAsteroid>(AsteroidClass, SpawnTransform, SpawnParams);
+	if(!Asteroid) 
+	{
+		return nullptr;
+	}
+
+	Asteroid->OnAsteroidDeath.AddDynamic(this, &ASpawner::OnAsteroidDeathAsteroid);
+	Asteroid->SetLevel(AsteroidLevel);
+	return Asteroid;
+}
+
+void ASpawner::OnAsteroidDeathAsteroid(FVector DeathLocation, int AsteroidLevel)
+{
+	LocationsAndLevels.Add(FLocationAndLevel(DeathLocation, AsteroidLevel-1));
+	LocationsAndLevels.Add(FLocationAndLevel(DeathLocation, AsteroidLevel-1));
+	DelaySpawn();
+}
+
+FTransform ASpawner::CreateNewAsteroidTransform(FVector DeathLocation, int AsteroidLevel)
+{
+	FVector Location = DeathLocation;
+    float RandomYaw = FMath::FRandRange(0.f, 360.f);
+    FRotator RandomRotation(0.f, RandomYaw, 0.f);
+    FVector Scale(AsteroidLevel, AsteroidLevel, AsteroidLevel);
+    FTransform NewTransform(RandomRotation, Location, Scale);
+    return NewTransform;
+}
+
+
+void ASpawner::TrySpawnSpecialEnemy()
+{
+	if(SpecialEnemyIndex >= SpecialEnemySpawnTime.Num()) return;
+	float CurrentTimeSpawn = SpecialEnemySpawnTime[SpecialEnemyIndex];
+	if(!SpecialEnemySpawnTime.IsEmpty() && CurrentTimeSpawn <= GameTime)
+	{
+		SpawnSpecialEnemy();
+		SpecialEnemyIndex++;
+	}
+}
+
+void ASpawner::TrySpawnAsteroid()
+{
+	if(AsteroidIndex >= AsteroidSpawnTime.Num()) return;
+	float CurrentTimeSpawn = AsteroidSpawnTime[AsteroidIndex];
+	if(!AsteroidSpawnTime.IsEmpty() && CurrentTimeSpawn <= GameTime)
+	{
+		int AsteroidLevel = 3;
+		FVector SpawnLocation = EnemySpawnLocation + FVector(-700.f, 0, 0);
+		AAsteroid* Asteroid = SpawnAsteroid(SpawnLocation, AsteroidLevel);
+		AsteroidIndex++;
+	}
+}

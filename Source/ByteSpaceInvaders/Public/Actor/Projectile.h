@@ -33,7 +33,7 @@ public:
 	void InitializeProjectile(float NewDamage);
 
 
-private:
+protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<USceneComponent> BaseSceneComponent;	
@@ -44,6 +44,9 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UProjectileMovementComponent> ProjectileMovement;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ProjectileData, meta = (AllowPrivateAccess = "true"))
 	float Damage = 1.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ProjectileData, meta = (AllowPrivateAccess = "true"))
+	float ProjetileSpeed = 100.0f;
 };

@@ -6,6 +6,9 @@
 #include "Actor/Projectile.h"
 #include "Asteroid.generated.h"
 
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnAsteroidDeathSignature, FVector, DeathLocation, int, AsteroidLevel);
+
 /**
  * 
  */
@@ -19,16 +22,13 @@ public:
 	virtual void TakeDamage_Implementation(FDamageContext DamageContext) override;
 	virtual float GetDamage_Implementation() override;
 
+	UPROPERTY(BlueprintAssignable)
+	FOnAsteroidDeathSignature OnAsteroidDeath;
+	
+	UFUNCTION(BlueprintCallable)
+	void SetLevel(int NewLevel);
+
 private:
-	UFUNCTION(BlueprintCallable)
-	void SpawnChilds();
-
-	UFUNCTION(BlueprintCallable)
-	FTransform CreateNewTransform();
-
-	UFUNCTION(BlueprintCallable)
-	AAsteroid* SpawnChild();
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Asteroid, meta = (AllowPrivateAccess = "true"))
 	int Level = 1;
 

@@ -151,8 +151,8 @@ void AOrbitalShip::ChangeRadiusSmoothTick()
 {
 	TimeInRadiusChange += 0.01f;
 
-	float ChangeSpeedTransitionTime = ShipData->ChangeSpeedTransitionTime;
-	float Alpha = FMath::Min(TimeInRadiusChange/ChangeSpeedTransitionTime, 1.0f);
+	float ChangeRadiusTransitionTime = ShipData->ChangeRadiusTransitionTime;
+	float Alpha = FMath::Min(TimeInRadiusChange/ChangeRadiusTransitionTime, 1.0f);
 	float NewRadius = FMath::Lerp(StartRadius, EndRadius, Alpha);
 
 	SetRadiusLength(NewRadius);
@@ -176,6 +176,7 @@ void AOrbitalShip::SetRadiusLength(float RadiusLength)
 
 void AOrbitalShip::LowerOrbit()
 {
+	if(!CurrentOrbit.IsValid()) return;
 	CurrentOrbit = CurrentOrbit->GetNextOrbit();
 	ChangeRadiusSmooth(CurrentOrbit->GetRadius());
 }
@@ -183,8 +184,8 @@ void AOrbitalShip::LowerOrbit()
 
 void AOrbitalShip::ChangeDirection()
 {
-	float CurrentSpeed = RotatingMovement->RotationRate.Yaw;
-	ChangeSpeedSmooth(-CurrentSpeed);
+	float CurrentSpeedDirection = RotatingMovement->RotationRate.Yaw > 0? 1.0f : -1.0f;
+	ChangeSpeedSmooth(-CurrentSpeedDirection * ShipData->MaxSpeed);
 }
 
 void AOrbitalShip::ShipDeath(AActor* DeadActor)

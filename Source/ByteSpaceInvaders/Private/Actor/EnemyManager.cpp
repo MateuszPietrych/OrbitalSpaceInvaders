@@ -16,6 +16,12 @@ AEnemyManager::AEnemyManager()
 void AEnemyManager::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GetWorld()->GetTimerManager().SetTimer(ChangeDirectionTimer, this, &AEnemyManager::ChangeMovementDirection, TimeUntilChangeDirection, true);
+	GetWorld()->GetTimerManager().SetTimer(LowerOrbitTimer, this, &AEnemyManager::LowerOrbit, TimeOnSingleOrbit, true);
+
+	float FinalPeriodBetweenFires = GetTimePeriodBetweenFires();
+	GetWorld()->GetTimerManager().SetTimer(FiresTimer, this, &AEnemyManager::Fire, FinalPeriodBetweenFires, false);
 }
 
 // Called every frame
@@ -31,17 +37,14 @@ void AEnemyManager::FinishSpawningEnemies(TArray<AOrbitalShip*> SpawnedShipList)
 	{
 		Ship->OnShipDeath.AddDynamic(this, &AEnemyManager::RemoveShipFromList);
 	}
-	GetWorld()->GetTimerManager().SetTimer(ChangeDirectionTimer, this, &AEnemyManager::ChangeMovementDirection, TimeUntilChangeDirection, true);
-	GetWorld()->GetTimerManager().SetTimer(LowerOrbitTimer, this, &AEnemyManager::LowerOrbit, TimeOnSingleOrbit, true);
 
-	float FinalPeriodBetweenFires = GetTimePeriodBetweenFires();
-	GetWorld()->GetTimerManager().SetTimer(FiresTimer, this, &AEnemyManager::Fire, FinalPeriodBetweenFires, false);
 }
 
 void AEnemyManager::LowerOrbit()
 {
 	for(AOrbitalShip* Ship: OrbitalShips)
 	{
+		if(SpecialShips.Contains(Ship)) return;
 		Ship->LowerOrbit();
 	}
 }
@@ -50,6 +53,7 @@ void AEnemyManager::ChangeMovementDirection()
 {
 	for(AOrbitalShip* Ship: OrbitalShips)
 	{
+		if(SpecialShips.Contains(Ship)) return;
 		Ship->ChangeDirection();
 	}
 }
@@ -107,6 +111,7 @@ void AEnemyManager::AddEnemy(AOrbitalShip* Ship)
 {
 	Ship->OnShipDeath.AddDynamic(this, &AEnemyManager::RemoveShipFromList);
 	OrbitalShips.Add(Ship);
+	SpecialShips.Add(Ship);
 }
 
 void AEnemyManager::RemoveShipFromList(AOrbitalShip* Ship)

@@ -10,6 +10,8 @@
 class AOrbit;
 class AOrbitalShip;
 class AEnemyManager;
+class AAsteroid;
+
 
 UCLASS()
 class BYTESPACEINVADERS_API ASpawner : public AActor
@@ -34,6 +36,22 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SpawnSpecialEnemy();
 
+	UFUNCTION(BlueprintCallable)
+	AAsteroid* SpawnAsteroid(FVector SpawnLocation, int AsteroidLevel);
+
+	UFUNCTION(BlueprintCallable)
+	void OnAsteroidDeathAsteroid(FVector DeathLocation, int AsteroidLevel);
+
+	UFUNCTION(BlueprintCallable)
+	FTransform CreateNewAsteroidTransform(FVector DeathLocation, int Level);
+
+	void TrySpawnSpecialEnemy();
+
+	void TrySpawnAsteroid();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void DelaySpawn();
+
 	UFUNCTION()
 	TArray<AOrbitalShip*> SpawnOrbitalShipsOnOrbit(int EnemyCountOnOrbit, AOrbit* CurrentOrbit);
 
@@ -45,10 +63,16 @@ private:
 	TArray<float> SpecialEnemySpawnTime;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GameSetup, meta = (AllowPrivateAccess = "true"))
+	TArray<float> AsteroidSpawnTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GameSetup, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AOrbitalShip> EnemyShipClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GameSetup, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AOrbitalShip> SpecialEnemyShipClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GameSetup, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AAsteroid> AsteroidClass;
 
 	TWeakObjectPtr<AEnemyManager> EnemyManager;
 
@@ -60,6 +84,15 @@ private:
 
 	UPROPERTY()
 	int SpecialEnemyIndex = 0;
+
+	UPROPERTY()
+	int AsteroidIndex = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess ="true"))
+	TArray<FLocationAndLevel> LocationsAndLevels;
+
+	UPROPERTY()
+	float AsteroidSpawnDelayTime;
 
 
 

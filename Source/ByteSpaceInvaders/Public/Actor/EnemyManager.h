@@ -77,6 +77,9 @@ private:
 	TArray<AOrbitalShip*> OrbitalShips;
 
 	UPROPERTY()
+	TSet<AOrbitalShip*> SpecialShips;
+
+	UPROPERTY()
 	FTimerHandle LowerOrbitTimer;
 
 	UPROPERTY()

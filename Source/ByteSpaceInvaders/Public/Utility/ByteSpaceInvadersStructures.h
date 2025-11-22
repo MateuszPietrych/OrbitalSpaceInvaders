@@ -58,3 +58,71 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EDamageType DamageType;
 };
+
+USTRUCT(BlueprintType)
+struct FPhysicalScreenBoundry
+{
+	GENERATED_BODY()
+
+public:
+	void SetPhysicalScreenBoundry(FVector NewTopLeftCorner, FVector NewTopRightCorner, FVector NewDownLeftCorner, FVector NewDownRightCorner)
+	{
+		TopLeftCorner = NewTopLeftCorner;
+		TopRightCorner = NewTopRightCorner;
+		DownLeftCorner = NewDownLeftCorner;
+		DownRightCorner = NewDownRightCorner;
+		MiddleTop = (TopLeftCorner+TopRightCorner)/2;
+		MiddleDown = (DownLeftCorner+DownRightCorner)/2;
+		MiddleLeft = (TopLeftCorner-DownLeftCorner)/2;
+		MiddleRight = (TopRightCorner-DownRightCorner)/2;
+		Length = FVector::Dist(TopLeftCorner, TopRightCorner);
+		Height = FVector::Dist(TopLeftCorner, DownLeftCorner);
+	}
+
+	UPROPERTY()
+	FVector TopLeftCorner;
+
+	UPROPERTY()
+	FVector TopRightCorner;
+
+	UPROPERTY()
+	FVector DownLeftCorner;
+
+	UPROPERTY()
+	FVector DownRightCorner;
+
+	UPROPERTY()
+	FVector MiddleTop;
+
+	UPROPERTY()
+	FVector MiddleDown;
+
+	UPROPERTY()
+	FVector MiddleLeft;
+
+	UPROPERTY()
+	FVector MiddleRight;
+
+	UPROPERTY()
+	float Length;
+
+	UPROPERTY()
+	float Height;
+};
+
+USTRUCT(BlueprintType)
+struct FLocationAndLevel
+{
+
+	GENERATED_BODY()
+	
+public:
+	FLocationAndLevel(){}
+	FLocationAndLevel(FVector NewLocation, int NewLevel) : Location(NewLocation), Level(NewLevel) {}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector Location;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int Level;
+};
