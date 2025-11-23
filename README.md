@@ -25,3 +25,10 @@ co sprawia, że duża liczba pocisków często tak naprawdę przydaje się jako 
 W podstawowym Space Invaders, pod koniec gry dochodziło do przyspieszania przeciwników wraz z kolejnymi poległymi. Sprawiało to, że konieczna była precyzja w wymierzaniu strzału.
 W tym przypadku na orbicie, mocno przyspieszony ruch po orbicie sprawiałby więcej kłopotu, dlatego zdecydowano się, że elementem prezcyzji jaką musi wykazać się gracz na koniec,
 to ciągłe ataki ze strony przeciwników, którzy znajdują się coraz bliżej. W ten sposób wciąż coraz trudniej zestrzelić przeciwników, ale w inny sposób.
+
+5. Nazewnictwo w EnemyManager
+Tutaj popełniłem błąd mieszając nazewnictwo Enemy z Ship, ale już nie było czasu na zmiane tego.
+
+6. Object Pooling
+Przydałby się on dla pocisków, ale też nie zdążył zostać zaimplementowany.
+
