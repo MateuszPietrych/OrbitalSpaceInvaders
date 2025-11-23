@@ -32,3 +32,5 @@ Tutaj popełniłem błąd mieszając nazewnictwo Enemy z Ship, ale już nie był
 6. Object Pooling
 Przydałby się on dla pocisków, ale też nie zdążył zostać zaimplementowany.
 
+PS:
+P - Pause
