@@ -20,15 +20,21 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GameSetup, meta = (AllowPrivateAccess = "true"))
-	FPeriodEffectTimeInfo AsteroidTimeInfo;
+	FPeriodEffectForEndless AsteroidTimeInfo;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GameSetup, meta = (AllowPrivateAccess = "true"))
-	FPeriodEffectTimeInfo SpecialEnemyTimeInfo;
+	FPeriodEffectForEndless SpecialEnemyTimeInfo;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GameSetup, meta = (AllowPrivateAccess = "true"))
-	FPeriodEffectTimeInfo EnemySpeedTimeInfo;
+	FPeriodEffectForEndless EnemySpeedTimeInfo;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GameSetup, meta = (AllowPrivateAccess = "true"))
-	FPeriodEffectTimeInfo EnemyFireSpeedInfo;
+	FPeriodEffectForEndless EnemyFireSpeedInfo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GameSetup, meta = (AllowPrivateAccess = "true"))
+	FPeriodEffectForEndless OrbitalEnemyCountInfo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GameSetup, meta = (AllowPrivateAccess = "true"))
+	int EnemiesOnOrbitMaxCount = 15;
 	
 };

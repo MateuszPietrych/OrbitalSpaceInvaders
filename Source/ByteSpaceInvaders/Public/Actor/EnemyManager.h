@@ -58,27 +58,22 @@ private:
 	TArray<int> GetRandomEnemyIndexes(int EnemyCount);
 
 private:
-	UPROPERTY(EditDefaultsOnly, Category = EnemyOrbitMovement)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = EnemyOrbitMovement, meta = (AllowPrivateAccess = "true"))
 	float TimeOnSingleOrbit = 10.0f;
 
-	UPROPERTY(EditDefaultsOnly, Category = EnemyOrbitMovement)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = EnemyOrbitMovement, meta = (AllowPrivateAccess = "true"))
 	float TimeUntilChangeDirection = 5.0f;
 
-	//NOT USED YET - TODO?
-	UPROPERTY(EditDefaultsOnly, Category = EnemyOrbitMovement)
-	float OrbitalShipsSpeedModifierOnOrbitChange = 1.1f;
-
-
-	UPROPERTY(EditDefaultsOnly, Category = Fire)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Fire, meta = (AllowPrivateAccess = "true"))
 	float PeroidBetweenFiresBase = 1.0f;
 
-	UPROPERTY(EditDefaultsOnly, Category = Fire)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Fire, meta = (AllowPrivateAccess = "true"))
 	float MaxRandomChangeToPeroid = 0.2f;
 
-	UPROPERTY(EditDefaultsOnly, Category = Fire)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Fire, meta = (AllowPrivateAccess = "true"))
 	int FireCountBase = 5;
 
-	UPROPERTY(EditDefaultsOnly, Category = Fire)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Fire, meta = (AllowPrivateAccess = "true"))
 	int MaxRandomFireCountChange = 2;
 
 	UPROPERTY()

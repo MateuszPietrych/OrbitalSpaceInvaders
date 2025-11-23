@@ -8,7 +8,7 @@
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthEqualOrBelowZero, AActor*, DeadActor);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHealthChange, int, CurrentHealth, int, MaxHealth);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHealthChange, float, CurrentHealth, float, MaxHealth);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BYTESPACEINVADERS_API UHealthComponent : public UActorComponent
@@ -35,6 +35,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void InitializeHealthComponent(float NewMaxHealth);
+
+	UFUNCTION(BlueprintCallable)
+	void ResetHp();
 
 	UFUNCTION(BlueprintCallable)
 	float GetHealth();

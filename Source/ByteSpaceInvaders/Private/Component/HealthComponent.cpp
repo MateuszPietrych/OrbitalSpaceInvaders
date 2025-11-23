@@ -66,3 +66,8 @@ bool UHealthComponent::IsDead()
 {
 	return CurrentHealth <= 0.0f;
 }
+
+void UHealthComponent::ResetHp()
+{
+	SetHealth(MaxHealth);
+}

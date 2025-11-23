@@ -186,7 +186,7 @@ void AOrbitalShip::LowerOrbit()
 
 void AOrbitalShip::ChangeDirection()
 {
-	float CurrentSpeedDirection = RotatingMovement->RotationRate.Yaw > 0? 1.0f : -1.0f;
+	float CurrentSpeedDirection = RotatingMovement->RotationRate.Yaw > 0 ? 1.0f : -1.0f;
 	ChangeSpeedSmooth(-CurrentSpeedDirection * GetMaxSpeed());
 }
 
@@ -202,7 +202,7 @@ void AOrbitalShip::ShipDeath(AActor* DeadActor)
 
 void AOrbitalShip::Reset_Implementation()
 {
-	HealthComponent->SetHealth(HealthComponent->GetMaxHealth());
+	HealthComponent->ResetHp();
 }
 
 void AOrbitalShip::FireProjectile()

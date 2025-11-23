@@ -40,6 +40,9 @@ struct FEnemyWave
 	GENERATED_BODY()
 
 public:
+	FEnemyWave() {}
+	FEnemyWave(TArray<int> NewEnemiesOnOrbits) : EnemiesOnOrbits(NewEnemiesOnOrbits) {}
+
 	//First element is number of enemies on the most far orbit
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<int> EnemiesOnOrbits;
@@ -128,7 +131,7 @@ public:
 };
 
 USTRUCT(BlueprintType)
-struct FPeriodEffectTimeInfo
+struct FPeriodEffectForEndless
 {
 
 	GENERATED_BODY()
@@ -136,19 +139,19 @@ struct FPeriodEffectTimeInfo
 public:
 	float GetValueOnLevel(int Level, bool bBottomBoundry)
 	{
-		float ValueOnLevel = StartTimeBetweenSpawn + HarderPerLevel * Level;
+		float ValueOnLevel = StartValue + AdditionalEffectPerLevel * Level;
 		float ClampedValue = bBottomBoundry? 
-								FMath::Clamp(ValueOnLevel, BoundryTimeBetweenSpawn, ValueOnLevel):
-								FMath::Clamp(ValueOnLevel, ValueOnLevel, BoundryTimeBetweenSpawn);
+								FMath::Clamp(ValueOnLevel, Boundry, ValueOnLevel):
+								FMath::Clamp(ValueOnLevel, ValueOnLevel, Boundry);
 		return ClampedValue;
 	}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float BoundryTimeBetweenSpawn = 2.0f;
+	float Boundry = 2.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float StartTimeBetweenSpawn = 30.0f;
+	float StartValue = 30.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float HarderPerLevel = 1.0f;
+	float AdditionalEffectPerLevel = 1.0f;
 };

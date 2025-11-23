@@ -63,13 +63,13 @@ public:
 	AEnemyManager* GetEnemyManager();
 
 	UFUNCTION()
-	void HandlePlayerHealthChange(int CurrentHealth, int MaxHealth);
+	void HandlePlayerHealthChange(float CurrentHealth, float MaxHealth);
 
 	UFUNCTION()
-	void HandleEarthHealthChange(int CurrentHealth, int MaxHealth);
+	void HandleEarthHealthChange(float CurrentHealth, float MaxHealth);
 
 	UFUNCTION()
-	void HandleHealthChange(int CurrentHealth, int MaxHealth, EUIHealthChangeActors ActorType);
+	void HandleHealthChange(float CurrentHealth, float MaxHealth, EUIHealthChangeActors ActorType);
 
 	UFUNCTION()
 	void HandlePauseGame(bool bPaused);

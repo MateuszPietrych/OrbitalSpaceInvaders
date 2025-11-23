@@ -48,17 +48,17 @@ void UUIController::BindCallbacksToDependencies()
     GetEnemyManager()->OnDestroyingLastEnemy.AddUniqueDynamic(this, &UUIController::HandleDestroyingLastEnemy);
 }
 
-void UUIController::HandlePlayerHealthChange(int CurrentHealth, int MaxHealth)
+void UUIController::HandlePlayerHealthChange(float CurrentHealth, float MaxHealth)
 {
     HandleHealthChange(CurrentHealth, MaxHealth, EUIHealthChangeActors::Player);
 }
 
-void UUIController::HandleEarthHealthChange(int CurrentHealth, int MaxHealth)
+void UUIController::HandleEarthHealthChange(float CurrentHealth, float MaxHealth)
 {
     HandleHealthChange(CurrentHealth, MaxHealth, EUIHealthChangeActors::Earth);
 }
 
-void UUIController::HandleHealthChange(int CurrentHealth, int MaxHealth, EUIHealthChangeActors ActorType)
+void UUIController::HandleHealthChange(float CurrentHealth, float MaxHealth, EUIHealthChangeActors ActorType)
 {
     OnHealthChangeController.Broadcast(CurrentHealth, MaxHealth, ActorType);
     if(CurrentHealth <= 0.0f)
