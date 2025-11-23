@@ -10,6 +10,7 @@
 #include "Components/ShapeComponent.h"
 #include "Components/BoxComponent.h"
 #include "Actor/Boundry.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ABoundryManager::ABoundryManager()
@@ -71,8 +72,7 @@ ABoundry* ABoundryManager::SpawnBoundry(FVector Location, bool bIsHorizontal)
     FActorSpawnParameters SpawnParams = FActorSpawnParameters();
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn; 
     ABoundry* Boundry = GetWorld()->SpawnActor<ABoundry>(BoundryClass, Location, Rotator, SpawnParams);
-	// FVector NewExtent = bIsHorizontal? FVector(10.f, PhysicalScreenBoundry.Length, 1000.f) : FVector(PhysicalScreenBoundry.Height, 10.f,1000.f);
-	FVector NewExtent = bIsHorizontal? FVector(10.f, PhysicalScreenBoundry.Length, 1000.f) : FVector(PhysicalScreenBoundry.Height, 10.f, 1000.f);
+	FVector NewExtent = bIsHorizontal? FVector(10.f, PhysicalScreenBoundry.Length, 1500.f) : FVector(PhysicalScreenBoundry.Height, 10.f, 1500.f);
 	Boundry->SetNewBoundry(NewExtent, bIsHorizontal);
 	Boundry->OnBoundryDetection.AddDynamic(this, &ABoundryManager::OnBoundryDetection);
 	return Boundry;
@@ -82,18 +82,21 @@ ABoundry* ABoundryManager::SpawnBoundry(FVector Location, bool bIsHorizontal)
 void ABoundryManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	GameTime += DeltaTime;
+	GameTime = UGameplayStatics::GetTimeSeconds(this);
 
+	//TODO
+	TArray<AActor*> ActorToRemoveList;
 	for (const TPair<AActor* const, float>& Pair : TimeActorCanTravelAgain)
 	{
 		AActor* Actor = Pair.Key;
 		float Time = Pair.Value;
-		if(Time<GameTime)
-		{
-			TimeActorCanTravelAgain.Remove(Actor);
-		}
+		if(Time<GameTime) ActorToRemoveList.Add(Actor);
 	}
 	
+	for (AActor* Actor : ActorToRemoveList)
+	{
+		TimeActorCanTravelAgain.Remove(Actor);
+	}
 }
 
 void ABoundryManager::OnBoundryDetection(ABoundry* Boundry, AActor* DetectedActor)

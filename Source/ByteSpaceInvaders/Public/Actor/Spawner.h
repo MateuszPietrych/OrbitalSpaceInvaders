@@ -31,7 +31,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-	void SpawnStartObritalShips();
+	virtual void StartGame(int Level = 1);
+
+	UFUNCTION(BlueprintCallable)
+	void SpawnStartObritalShips(float SpeedModifier = 1.0f);
 
 	UFUNCTION(BlueprintCallable)
 	void SpawnSpecialEnemy();
@@ -53,9 +56,9 @@ public:
 	void DelaySpawn();
 
 	UFUNCTION()
-	TArray<AOrbitalShip*> SpawnOrbitalShipsOnOrbit(int EnemyCountOnOrbit, AOrbit* CurrentOrbit);
+	TArray<AOrbitalShip*> SpawnOrbitalShipsOnOrbit(int EnemyCountOnOrbit, AOrbit* CurrentOrbit, float SpeedModifier = 1.0f);
 
-private:
+protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GameSetup, meta = (AllowPrivateAccess = "true"))
 	FEnemyWave StartWave;
 
@@ -79,7 +82,7 @@ private:
 	UPROPERTY()
 	FVector EnemySpawnLocation;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	float GameTime = 0.0f;
 
 	UPROPERTY()
@@ -93,7 +96,5 @@ private:
 
 	UPROPERTY()
 	float AsteroidSpawnDelayTime;
-
-
 
 };

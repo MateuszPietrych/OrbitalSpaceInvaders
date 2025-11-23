@@ -20,3 +20,8 @@ UHpVisualsDataAsset* AEarth::GetHpVisualsDataAsset()
 {
     return HpVisualsDataAsset;
 }
+
+void AEarth::Reset_Implementation()
+{
+    HealthComponent->SetHealth(HealthComponent->GetMaxHealth());
+}

@@ -40,6 +40,11 @@ void AEnemyManager::FinishSpawningEnemies(TArray<AOrbitalShip*> SpawnedShipList)
 
 }
 
+void AEnemyManager::SetFireCountBase(int FireCount)
+{
+	FireCountBase = FireCount;
+}
+
 void AEnemyManager::LowerOrbit()
 {
 	for(AOrbitalShip* Ship: OrbitalShips)
@@ -120,5 +125,14 @@ void AEnemyManager::RemoveShipFromList(AOrbitalShip* Ship)
 	{
 		OrbitalShips.Remove(Ship);
 		if(OrbitalShips.IsEmpty()) OnDestroyingLastEnemy.Broadcast();
+	}
+}
+
+void AEnemyManager::Reset_Implementation()
+{
+	for(AOrbitalShip* Ship: OrbitalShips)
+	{
+		RemoveShipFromList(Ship);
+		Ship->Destroy();
 	}
 }

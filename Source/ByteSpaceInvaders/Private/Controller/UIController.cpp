@@ -7,8 +7,10 @@
 #include "Component/HealthComponent.h"
 #include "DataAsset/HpVisualsDataAsset.h"
 #include "Utility/ByteSpaceInvadersStructures.h"
+#include "Utility/UtilityBlueprintFunctionLibrary.h"
 #include "Actor/EnemyManager.h"
 #include "Controller/MainGameplayPlayerController.h"
+#include "Game/ByteSpaceInvadersGameMode.h"
 
 void UUIController::SetWidgetControllerParams(const FUIControllerParams& UICParams)
 {
@@ -86,4 +88,23 @@ UHpVisualsDataAsset* UUIController::GetHpVisualDataAsset(EUIHealthChangeActors A
             return GetPlayerShip()->GetHpVisualsDataAsset();
     }
     return nullptr;
+}
+
+void UUIController::ResumeGame(EGameState PreviousState)
+{
+    AByteSpaceInvadersGameMode* GameMode = UUtilityBlueprintFunctionLibrary::GetByteSpaceInvadersGameMode(this);
+    switch(PreviousState)
+    {
+        case EGameState::Won:
+            GameMode->ResetGame();
+            break;
+        case EGameState::Lost:
+            GameMode->ResetGame();
+            break;
+    }
+}
+
+void UUIController::ResetGame()
+{
+ 
 }

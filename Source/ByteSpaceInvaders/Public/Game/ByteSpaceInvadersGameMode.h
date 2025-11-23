@@ -6,7 +6,10 @@
 #include "GameFramework/GameModeBase.h"
 #include "ByteSpaceInvadersGameMode.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnFinishGameReset);
+
 class AOrbit;
+class ASpawner;
 /**
  * 
  */
@@ -23,8 +26,23 @@ public:
 	UFUNCTION(BlueprintCallable)
 	AOrbit* GetFirstOrbit();
 
+	UFUNCTION(BlueprintCallable)
+	void InitalizeSpawner();
+
+	UFUNCTION()
+	void ResetGame();
+
+	UPROPERTY(BlueprintAssignable)
+	FOnFinishGameReset GameReset;
+
 private:
 	UPROPERTY()
 	TObjectPtr<AOrbit> FirstOrbit;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<ASpawner> SpawnerClass;
+
+	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	int Level = 1.0f;
 	
 };

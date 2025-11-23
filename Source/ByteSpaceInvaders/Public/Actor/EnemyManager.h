@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Interface/Resetable.h"
 #include "EnemyManager.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDestroyingLastEnemy);
@@ -12,7 +13,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDestroyingLastEnemy);
 class AOrbitalShip;
 
 UCLASS()
-class BYTESPACEINVADERS_API AEnemyManager : public AActor
+class BYTESPACEINVADERS_API AEnemyManager : public AActor, public IResetable
 {
 	GENERATED_BODY()
 	
@@ -28,7 +29,12 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void Reset_Implementation() override;
+
 	void FinishSpawningEnemies(TArray<AOrbitalShip*> SpawnedShipList);
+
+	void SetFireCountBase(int FireCount);
+
 
 	void LowerOrbit();
 
@@ -40,6 +46,8 @@ public:
 	void RemoveShipFromList(AOrbitalShip* Ship);
 
 	void Fire();
+
+	void ResetEnemyManager();
 
 	FOnDestroyingLastEnemy OnDestroyingLastEnemy;
 

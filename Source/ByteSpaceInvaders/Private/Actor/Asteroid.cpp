@@ -30,3 +30,8 @@ void AAsteroid::SetLevel(int NewLevel)
     FVector NewScale = FVector(Level,Level,Level);
     SetActorScale3D(NewScale);
 }
+
+void AAsteroid::Reset_Implementation()
+{
+    Destroy();
+}

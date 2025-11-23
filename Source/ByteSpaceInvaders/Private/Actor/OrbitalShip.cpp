@@ -88,22 +88,24 @@ float AOrbitalShip::GetDamage_Implementation()
 	return ShipData->ShipDamage;
 }
 
-void AOrbitalShip::InitializeShip(AOrbit* NewOrbit)
+void AOrbitalShip::InitializeShip(AOrbit* NewOrbit, float NewSpeedModifier)
 {
 	CurrentOrbit = NewOrbit;
 	SetRadiusLength(CurrentOrbit->GetRadius());
+	SpeedModifier = NewSpeedModifier;
 }
 
 void AOrbitalShip::ChangeSpeed(float NewSpeed)
 {
-	float FinalNewSpeed = FMath::Clamp(NewSpeed, -ShipData->MaxSpeed, ShipData->MaxSpeed);
+	float MaxSpeed = GetMaxSpeed();
+	float FinalNewSpeed = FMath::Clamp(NewSpeed*SpeedModifier, -MaxSpeed, MaxSpeed);
 	RotatingMovement->RotationRate = FRotator(0.0f, FinalNewSpeed, 0.0f);
 }
 
 void AOrbitalShip::ChangeSpeedSmooth(float NewSpeed)
 {
 	StartSpeed = RotatingMovement->RotationRate.Yaw;
-	EndSpeed = NewSpeed;
+	EndSpeed = NewSpeed * SpeedModifier;
 	bIsSmoothSpeedChangeOn = true;
 }
 
@@ -130,8 +132,8 @@ void AOrbitalShip::AddSpeed(float AddSpeed, float AccelerationModifier, float De
 	float CurrentSpeed = RotatingMovement->RotationRate.Yaw;
 	bool bCurrentSpeedPositive = CurrentSpeed >= 0;
 	bool bAddSpeedPositive = AddSpeed >= 0;
-	float SpeedModifier = bCurrentSpeedPositive == bAddSpeedPositive? AccelerationModifier : DecelerationModifier;
-	float FinalAddSpeed = AddSpeed * SpeedModifier;
+	float AccelerationSpeedModifier = bCurrentSpeedPositive == bAddSpeedPositive? AccelerationModifier : DecelerationModifier;
+	float FinalAddSpeed = AddSpeed * AccelerationSpeedModifier;
 	ChangeSpeed(CurrentSpeed + FinalAddSpeed);
 }
 
@@ -151,7 +153,7 @@ void AOrbitalShip::ChangeRadiusSmoothTick()
 {
 	TimeInRadiusChange += 0.01f;
 
-	float ChangeRadiusTransitionTime = ShipData->ChangeRadiusTransitionTime;
+	float ChangeRadiusTransitionTime = ShipData->ChangeRadiusTransitionTime/SpeedModifier;
 	float Alpha = FMath::Min(TimeInRadiusChange/ChangeRadiusTransitionTime, 1.0f);
 	float NewRadius = FMath::Lerp(StartRadius, EndRadius, Alpha);
 
@@ -185,12 +187,22 @@ void AOrbitalShip::LowerOrbit()
 void AOrbitalShip::ChangeDirection()
 {
 	float CurrentSpeedDirection = RotatingMovement->RotationRate.Yaw > 0? 1.0f : -1.0f;
-	ChangeSpeedSmooth(-CurrentSpeedDirection * ShipData->MaxSpeed);
+	ChangeSpeedSmooth(-CurrentSpeedDirection * GetMaxSpeed());
+}
+
+float AOrbitalShip::GetMaxSpeed()
+{
+	return ShipData->MaxSpeed * SpeedModifier;
 }
 
 void AOrbitalShip::ShipDeath(AActor* DeadActor)
 {
 	OnShipDeath.Broadcast(this);
+}
+
+void AOrbitalShip::Reset_Implementation()
+{
+	HealthComponent->SetHealth(HealthComponent->GetMaxHealth());
 }
 
 void AOrbitalShip::FireProjectile()

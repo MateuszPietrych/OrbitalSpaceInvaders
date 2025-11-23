@@ -83,6 +83,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	UHpVisualsDataAsset* GetHpVisualDataAsset(EUIHealthChangeActors ActorType);
 
+	UFUNCTION(BlueprintCallable)
+	void ResumeGame(EGameState PreviousState);
+
 	UPROPERTY(BlueprintAssignable)
 	FOnHealthChangeController OnHealthChangeController;
 	
@@ -90,6 +93,8 @@ public:
 	FOnChangeGameState OnChangeGameState;
 
 private:
+	void ResetGame();
+
 	UPROPERTY()
 	TObjectPtr<AOrbitalShip> PlayerShip;
 

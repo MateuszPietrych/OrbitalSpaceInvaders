@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Interface/Combat.h"
+#include "Interface/Resetable.h"
 #include "OrbitalShip.generated.h"
 
 class UOrbitalShipDataAsset;
@@ -20,7 +21,7 @@ class UHpVisualsDataAsset;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnShipDeathSignature, AOrbitalShip*, DeadShip);
 
 UCLASS()
-class BYTESPACEINVADERS_API AOrbitalShip : public APawn, public ICombat
+class BYTESPACEINVADERS_API AOrbitalShip : public APawn, public ICombat, public IResetable
 {
 	GENERATED_BODY()
 
@@ -42,8 +43,10 @@ public:
 	virtual void TakeDamage_Implementation(FDamageContext DamageContext) override;
 	virtual float GetDamage_Implementation() override;
 
+	virtual void Reset_Implementation() override;
+
 	UFUNCTION(BlueprintCallable)
-	void InitializeShip(AOrbit* NewOrbit);
+	void InitializeShip(AOrbit* NewOrbit, float NewSpeedModifier = 1.0f);
 
 	UFUNCTION(BlueprintCallable)
 	void ChangeSpeed(float NewSpeed);
@@ -71,6 +74,8 @@ public:
 
 	UFUNCTION()
 	void ChangeDirection();
+
+	float GetMaxSpeed();
 
 	UFUNCTION()
 	void ShipDeath(AActor* DeadActor);
@@ -126,5 +131,7 @@ private:
 	float TimeInRadiusChange = 0.0f;
 	float StartRadius = 0.0f;
 	float EndRadius = 0.0f;
+
+	float SpeedModifier = 1.0f;
 
 };

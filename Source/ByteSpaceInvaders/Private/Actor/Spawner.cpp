@@ -9,6 +9,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Pawn.h"
 #include "Actor/Asteroid.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ASpawner::ASpawner()
@@ -34,13 +35,18 @@ void ASpawner::BeginPlay()
 void ASpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	GameTime += DeltaTime;
+	GameTime = UGameplayStatics::GetTimeSeconds(this);
 
 	TrySpawnSpecialEnemy();
 	TrySpawnAsteroid();
 }
 
-void ASpawner::SpawnStartObritalShips()
+void ASpawner::StartGame(int Level)
+{
+	SpawnStartObritalShips();
+}
+
+void ASpawner::SpawnStartObritalShips(float SpeedModifier)
 {
 	AOrbit* FirstOrbit = UUtilityBlueprintFunctionLibrary::GetFirstOrbit(this);
 	AOrbit* CurrentOrbit = FirstOrbit;
@@ -51,18 +57,17 @@ void ASpawner::SpawnStartObritalShips()
 		return;
 	}
 
-
 	TArray<AOrbitalShip*> SpawnedShipList;
 	for(int EnemyCountOnOrbit : StartWave.EnemiesOnOrbits)
 	{
-		TArray<AOrbitalShip*> SpawnedShipListOnOrbit = SpawnOrbitalShipsOnOrbit(EnemyCountOnOrbit, CurrentOrbit);
+		TArray<AOrbitalShip*> SpawnedShipListOnOrbit = SpawnOrbitalShipsOnOrbit(EnemyCountOnOrbit, CurrentOrbit, SpeedModifier);
 		SpawnedShipList.Append(SpawnedShipListOnOrbit);
 		CurrentOrbit = CurrentOrbit->GetNextOrbit();
 	}
 	EnemyManager->FinishSpawningEnemies(SpawnedShipList);
 }
 
-TArray<AOrbitalShip*> ASpawner::SpawnOrbitalShipsOnOrbit(int EnemyCountOnOrbit, AOrbit* CurrentOrbit)
+TArray<AOrbitalShip*> ASpawner::SpawnOrbitalShipsOnOrbit(int EnemyCountOnOrbit, AOrbit* CurrentOrbit, float SpeedModifier)
 {
 	FRotator Rotation = FRotator::ZeroRotator;
 	FActorSpawnParameters SpawnParams = FActorSpawnParameters();
@@ -74,7 +79,7 @@ TArray<AOrbitalShip*> ASpawner::SpawnOrbitalShipsOnOrbit(int EnemyCountOnOrbit, 
 		AOrbitalShip* SpawnedShip = GetWorld()->SpawnActor<AOrbitalShip>(EnemyShipClass, EnemySpawnLocation, Rotation, SpawnParams);
 		if(SpawnedShip == nullptr) break;
 		
-		SpawnedShip->InitializeShip(CurrentOrbit);
+		SpawnedShip->InitializeShip(CurrentOrbit, SpeedModifier);
 		SpawnedShipList.Add(SpawnedShip);
 		Rotation += FRotator(0.0f, 360.0f/EnemyCountOnOrbit, 0.0f);
 	}

@@ -126,3 +126,29 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Level;
 };
+
+USTRUCT(BlueprintType)
+struct FPeriodEffectTimeInfo
+{
+
+	GENERATED_BODY()
+	
+public:
+	float GetValueOnLevel(int Level, bool bBottomBoundry)
+	{
+		float ValueOnLevel = StartTimeBetweenSpawn + HarderPerLevel * Level;
+		float ClampedValue = bBottomBoundry? 
+								FMath::Clamp(ValueOnLevel, BoundryTimeBetweenSpawn, ValueOnLevel):
+								FMath::Clamp(ValueOnLevel, ValueOnLevel, BoundryTimeBetweenSpawn);
+		return ClampedValue;
+	}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float BoundryTimeBetweenSpawn = 2.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float StartTimeBetweenSpawn = 30.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float HarderPerLevel = 1.0f;
+};
