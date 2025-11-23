@@ -22,8 +22,6 @@ void UWeaponComponent::SpawnProjectile(TSubclassOf<AProjectile> ProjectileClass,
 
 	FRotator Rotation = SocketTransform.GetRotation().Rotator();
 	FVector Location = SocketTransform.GetLocation();
-	// FActorSpawnParameters SpawnParams = FActorSpawnParameters();
-	// SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn; 
 	AProjectile* SpawnedProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, Location, Rotation);
 	if(!SpawnedProjectile) return;
 	SpawnedProjectile->InitializeProjectile(Damage);

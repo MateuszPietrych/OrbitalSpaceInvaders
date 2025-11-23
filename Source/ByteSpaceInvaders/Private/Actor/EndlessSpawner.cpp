@@ -14,7 +14,8 @@ void AEndlessSpawner::StartGame(int Level)
 
     TArray<int> NewEnemyWave;
     int Orbit = 0;
-    for(int i=1; i<50; i++)
+    int SpawnCount = FMath::Max(MaxGameTime/SpecialEnemyTime, MaxGameTime/AsteroidTime);
+    for(int i=1; i<SpawnCount; i++)
     {
         SpecialEnemySpawnTime.Add(SpecialEnemyTime*i);
         AsteroidSpawnTime.Add(AsteroidTime*i);

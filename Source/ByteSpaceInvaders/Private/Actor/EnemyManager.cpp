@@ -49,7 +49,7 @@ void AEnemyManager::LowerOrbit()
 {
 	for(AOrbitalShip* Ship: OrbitalShips)
 	{
-		if(SpecialShips.Contains(Ship)) return;
+		if(SpecialShips.Contains(Ship) || Ship == nullptr) return;
 		Ship->LowerOrbit();
 	}
 }
@@ -58,7 +58,7 @@ void AEnemyManager::ChangeMovementDirection()
 {
 	for(AOrbitalShip* Ship: OrbitalShips)
 	{
-		if(SpecialShips.Contains(Ship)) return;
+		if(SpecialShips.Contains(Ship) || Ship == nullptr) return;
 		Ship->ChangeDirection();
 	}
 }
@@ -96,16 +96,16 @@ int AEnemyManager::GetFireCount()
 TArray<int> AEnemyManager::GetRandomEnemyIndexes(int EnemyCount)
 {
 	TArray<int> IndexList = TArray<int>();
-	int LastIndex = OrbitalShips.Num()-1;
-	if(EnemyCount >= LastIndex) 
+	int LastOrbitalShipIndex = OrbitalShips.Num()-1;
+	if(EnemyCount >= LastOrbitalShipIndex) 
 	{
-		for (int32 i = 0; i <= LastIndex; i++) IndexList.Add(i);
+		for (int i = 0; i <= LastOrbitalShipIndex; i++) IndexList.Add(i);
 		return IndexList;
 	}
 	
-	for (int32 i = 0; i <= EnemyCount; i++) 
+	for (int i = 0; i <= EnemyCount; i++) 
 	{
-		int RandomChangeToFireCount = FMath::RandRange(0, LastIndex);
+		int RandomChangeToFireCount = FMath::RandRange(0, LastOrbitalShipIndex);
 		if(IndexList.Contains(RandomChangeToFireCount)) continue;
 		IndexList.Add(RandomChangeToFireCount);
 	}

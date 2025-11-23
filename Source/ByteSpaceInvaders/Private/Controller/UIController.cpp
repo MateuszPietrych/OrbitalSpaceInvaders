@@ -103,8 +103,3 @@ void UUIController::ResumeGame(EGameState PreviousState)
             break;
     }
 }
-
-void UUIController::ResetGame()
-{
- 
-}

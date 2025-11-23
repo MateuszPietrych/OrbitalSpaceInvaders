@@ -93,8 +93,6 @@ public:
 	FOnChangeGameState OnChangeGameState;
 
 private:
-	void ResetGame();
-
 	UPROPERTY()
 	TObjectPtr<AOrbitalShip> PlayerShip;
 

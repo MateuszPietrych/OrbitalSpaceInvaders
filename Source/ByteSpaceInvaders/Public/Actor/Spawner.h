@@ -52,7 +52,9 @@ public:
 
 	void TrySpawnAsteroid();
 
-	UFUNCTION(BlueprintImplementableEvent)
+	FVector2D GetRandomUnitVector2D();
+
+	UFUNCTION()
 	void DelaySpawn();
 
 	UFUNCTION()
@@ -77,10 +79,19 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GameSetup, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AAsteroid> AsteroidClass;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Asteroid, meta = (AllowPrivateAccess = "true"))
+	int AsteroidLevelOnSpawn = 3;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Asteroid, meta = (AllowPrivateAccess = "true"))
+	int AsteroidDistanceOnSpawn = 750.f;
+
 	TWeakObjectPtr<AEnemyManager> EnemyManager;
 
 	UPROPERTY()
 	FVector EnemySpawnLocation;
+
+	UPROPERTY()
+	FTimerHandle DelaySpawnTimer;
 
 	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	float GameTime = 0.0f;
@@ -94,7 +105,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess ="true"))
 	TArray<FLocationAndLevel> LocationsAndLevels;
 
-	UPROPERTY()
-	float AsteroidSpawnDelayTime;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Asteroid, meta = (AllowPrivateAccess = "true"))
+	float AsteroidSpawnDelayTime = 0.1f;
 
 };

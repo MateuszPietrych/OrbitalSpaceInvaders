@@ -72,7 +72,11 @@ ABoundry* ABoundryManager::SpawnBoundry(FVector Location, bool bIsHorizontal)
     FActorSpawnParameters SpawnParams = FActorSpawnParameters();
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn; 
     ABoundry* Boundry = GetWorld()->SpawnActor<ABoundry>(BoundryClass, Location, Rotator, SpawnParams);
-	FVector NewExtent = bIsHorizontal? FVector(10.f, PhysicalScreenBoundry.Length, 1500.f) : FVector(PhysicalScreenBoundry.Height, 10.f, 1500.f);
+	check(Boundry);
+
+	FVector NewExtent = bIsHorizontal? 
+							FVector(DefaultBoundryWidth, PhysicalScreenBoundry.Length, DefaultBoundryHeight): 
+							FVector(PhysicalScreenBoundry.Height, DefaultBoundryWidth, DefaultBoundryHeight);
 	Boundry->SetNewBoundry(NewExtent, bIsHorizontal);
 	Boundry->OnBoundryDetection.AddDynamic(this, &ABoundryManager::OnBoundryDetection);
 	return Boundry;
@@ -84,7 +88,6 @@ void ABoundryManager::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	GameTime = UGameplayStatics::GetTimeSeconds(this);
 
-	//TODO
 	TArray<AActor*> ActorToRemoveList;
 	for (const TPair<AActor* const, float>& Pair : TimeActorCanTravelAgain)
 	{

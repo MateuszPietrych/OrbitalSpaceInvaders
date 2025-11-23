@@ -67,8 +67,14 @@ public:
 private:
 	ABoundry* SpawnBoundry(FVector Location, bool bIsHorizontal);
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = ShipData, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BoundryData, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<ABoundry> BoundryClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BoundryData, meta = (AllowPrivateAccess = "true"))
+	float DefaultBoundryWidth = 10.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BoundryData, meta = (AllowPrivateAccess = "true"))
+	float DefaultBoundryHeight = 1500.f;
 
 	UPROPERTY()
 	TMap<AActor*, float> TimeActorCanTravelAgain;
@@ -79,5 +85,7 @@ private:
 	float GameTime = 0.0f;
 
 	float TimeBetweenTravels = 5.0f;
+
+
 
 };

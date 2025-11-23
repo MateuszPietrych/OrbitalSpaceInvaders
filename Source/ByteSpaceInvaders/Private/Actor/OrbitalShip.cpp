@@ -30,9 +30,6 @@ AOrbitalShip::AOrbitalShip()
 	RotatingSphere->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 	RotatingSphere->SetupAttachment(RootComponent);
 
-	// CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
-	// CollisionSphere->SetupAttachment(RotatingSphere);
-
 	ShipMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
 	ShipMesh->SetupAttachment(RotatingSphere);
 
@@ -142,11 +139,6 @@ void AOrbitalShip::ChangeRadiusSmooth(float RadiusLength)
 	StartRadius = RotatingSphere->GetScaledSphereRadius();
 	EndRadius = RadiusLength;
 	bIsSmoothRadiusChangeOn = true;
-	UE_LOG(LogTemp, Warning,
-		TEXT("ChangeRadiusSmooth: SR - %f, ER - %f, b - %s"),
-		StartRadius,
-		EndRadius,
-		bIsSmoothRadiusChangeOn ? TEXT("True") : TEXT("False"));
 }
 
 void AOrbitalShip::ChangeRadiusSmoothTick()

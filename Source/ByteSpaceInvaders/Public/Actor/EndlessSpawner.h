@@ -36,5 +36,8 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GameSetup, meta = (AllowPrivateAccess = "true"))
 	int EnemiesOnOrbitMaxCount = 15;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GameSetup, meta = (AllowPrivateAccess = "true"))
+	float MaxGameTime = 300.f;
 	
 };
